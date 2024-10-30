@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Call Options</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-check-label {
+            margin-left: 10px;
+        }
+        .btn {
+            width: 100px;
+            margin: 5px;
+        }
+    </style>
+    <script>
+        function handleSubmit() {
+            const selectedOption = document.querySelector('input[name="callOption"]:checked').nextElementSibling.textContent;
+            alert("Churning request submitted for " + selectedOption);
+        }
+
+        function handleCancel() {
+            alert("Request Cancelled");
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>Call Options</h2>
+        <form>
+            <div class="form-group">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="callOption" id="nonConnected" value="nonConnected" checked>
+                    <label class="form-check-label" for="nonConnected">Non-Connected calls</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="callOption" id="connected" value="connected">
+                    <label class="form-check-label" for="connected">Connected calls</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="callOption" id="all" value="all">
+                    <label class="form-check-label" for="all">All</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-success" onclick="handleSubmit()">Submit</button>
+                <button type="button" class="btn btn-danger" onclick="handleCancel()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
