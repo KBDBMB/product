@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Call Options</title>
+    <title>Main Page</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
@@ -12,7 +12,7 @@
             padding: 20px;
         }
         .container {
-            max-width: 600px;
+            max-width: 800px;
             margin: auto;
             background: #fff;
             padding: 20px;
@@ -29,39 +29,146 @@
             width: 100px;
             margin: 5px;
         }
+        .popup-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+        .table-container {
+            margin-top: 20px;
+        }
+        .btn-churn {
+            background-color: white;
+            color: #007bff;
+            border: 1px solid #007bff;
+        }
+        .btn-churn img {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+        }
     </style>
     <script>
-        function handleSubmit() {
-            const selectedOption = document.querySelector('input[name="callOption"]:checked').nextElementSibling.textContent;
-            alert("Churning request submitted for " + selectedOption);
+        function openPopup() {
+            const checkboxes = document.querySelectorAll('.row-checkbox');
+            let isSelected = false;
+
+            checkboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    isSelected = true;
+                }
+            });
+
+            if (isSelected) {
+                document.getElementById('popup').style.display = 'block';
+            } else {
+                alert("List not selected");
+            }
         }
 
-        function handleCancel() {
-            alert("Request Cancelled");
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+        }
+
+        function handleSubmit() {
+            const selectedOption = document.querySelector('input[name="callOption"]:checked').value;
+            const rows = document.querySelectorAll('.table-row');
+            
+            rows.forEach(row => {
+                const checkbox = row.querySelector('.row-checkbox');
+                if (checkbox.checked) {
+                    const dialable = row.querySelector('.dialable');
+                    const connected = row.querySelector('.connected');
+                    const nonConnected = row.querySelector('.non-connected');
+
+                    if (selectedOption === 'Non-Connected calls') {
+                        dialable.textContent = parseInt(dialable.textContent) + parseInt(nonConnected.textContent);
+                        nonConnected.textContent = 0;
+                    } else if (selectedOption === 'Connected calls') {
+                        dialable.textContent = parseInt(dialable.textContent) + parseInt(connected.textContent);
+                        connected.textContent = 0;
+                    } else if (selectedOption === 'Total Dialed') {
+                        const total = parseInt(connected.textContent) + parseInt(nonConnected.textContent);
+                        dialable.textContent = parseInt(dialable.textContent) + total;
+                        connected.textContent = 0;
+                        nonConnected.textContent = 0;
+                    }
+
+                    row.querySelector('.all').textContent = parseInt(connected.textContent) + parseInt(nonConnected.textContent);
+                }
+            });
+
+            alert("Churning request submitted for " + selectedOption);
+            closePopup();
         }
     </script>
 </head>
 <body>
     <div class="container">
-        <h2>Call Options</h2>
+        <h2>Call Lists</h2>
+        <button class="btn btn-churn float-right" onclick="openPopup()">
+            <img src="customerchurn1.jpg" alt="Churn"> Churn
+        </button>
+        <div class="table-container">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>List Name</th>
+                        <th>Dialable</th>
+                        <th>Total Dialed</th>
+                        <th>Connected</th>
+                        <th>Non-Connected</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="table-row">
+                        <td><input type="checkbox" class="row-checkbox"></td>
+                        <td>Sample List</td>
+                        <td class="dialable">0</td>
+                        <td class="all">10</td>
+                        <td class="connected">6</td>
+                        <td class="non-connected">4</td>
+                    </tr>
+                    <tr class="table-row">
+                        <td><input type="checkbox" class="row-checkbox"></td>
+                        <td>Sample List 2</td>
+                        <td class="dialable">5</td>
+                        <td class="all">20</td>
+                        <td class="connected">12</td>
+                        <td class="non-connected">8</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="popup" class="popup-container">
+        <h2>Churn Options</h2>
         <form>
             <div class="form-group">
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="callOption" id="nonConnected" value="nonConnected" checked>
-                    <label class="form-check-label" for="nonConnected">Non-Connected calls</label>
+                    <input class="form-check-input" type="radio" name="callOption" id="radioNonConnected" value="Non-Connected calls" checked>
+                    <label class="form-check-label" for="radioNonConnected">Non-Connected calls</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="callOption" id="connected" value="connected">
-                    <label class="form-check-label" for="connected">Connected calls</label>
+                    <input class="form-check-input" type="radio" name="callOption" id="radioConnected" value="Connected calls">
+                    <label class="form-check-label" for="radioConnected">Connected calls</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="callOption" id="all" value="all">
-                    <label class="form-check-label" for="all">All</label>
+                    <input class="form-check-input" type="radio" name="callOption" id="radioTotal" value="Total Dialed">
+                    <label class="form-check-label" for="radioTotal">Total Dialed</label>
                 </div>
             </div>
             <div class="form-group">
                 <button type="button" class="btn btn-success" onclick="handleSubmit()">Submit</button>
-                <button type="button" class="btn btn-danger" onclick="handleCancel()">Cancel</button>
+                <button type="button" class="btn btn-danger" onclick="closePopup()">Cancel</button>
             </div>
         </form>
     </div>
